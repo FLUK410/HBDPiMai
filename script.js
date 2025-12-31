@@ -1,0 +1,109 @@
+// ปรับค่านี้ให้เป็นข้อมูลของคุณ
+const recipientName = "พี่ไหมมม"; // ใส่ชื่อจริงที่นี่
+const birthdayMessage = "ขอให้พี่ไหมเป็นพี่ที่น่ารักของผมคนเดียวพอไม่ต้องไปเป็นของใครอื่นเลย 😝💗จริง ๆ ผมรักพี่ไหมมากนะรักแบบที่คิดถึงทุกวันถ้าพี่ไหมใจดีบอกรักผมคืนบ้างก็ได้นะ🥺ปีนี้ไม่ว่าพี่ไหมจะเจออะไรวันที่เหนื่อย วันที่ท้อ วันที่ไม่โอเคผมจะอยู่ข้าง ๆ ตรงนี้เสมอคอยฟัง คอยรับทุกอย่างไว้เอง 🤍ไม่ต้องเก่ง ไม่ต้องเข้มแข็งตลอดก็ได้"; // ข้อความที่จะโชว์เมื่อเปิดของขวัญ
+const musicSrc = "music/ข้างกาย.mp3"; // เปลี่ยนเป็นพาธเพลงของคุณ
+const photoSrc = "images/photo.jpg"; // รูปโปรไฟล์
+const countdownTarget = ""; // ตัวอย่าง: "2025-12-31T00:00:00" หรือ "" ถ้าไม่ต้องการนับถอยหลัง
+
+// DOM
+const nameEl = document.getElementById("name");
+const titleEl = document.getElementById("title");
+const photoEl = document.getElementById("photo");
+const messageSection = document.getElementById("messageSection");
+const messageText = document.getElementById("messageText");
+const openGiftBtn = document.getElementById("openGiftBtn");
+const playMusicBtn = document.getElementById("playMusicBtn");
+const bgMusic = document.getElementById("bgMusic");
+const confettiContainer = document.getElementById("confetti");
+const countdownEl = document.getElementById("countdown");
+
+// apply initial data
+nameEl.textContent = recipientName;
+photoEl.src = photoSrc;
+messageText.textContent = birthdayMessage;
+if (musicSrc) bgMusic.src = musicSrc;
+
+// open gift handler
+openGiftBtn.addEventListener("click", () => {
+  messageSection.hidden = false;
+  messageSection.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  startConfetti();
+  tryPlayMusic();
+
+  openGiftBtn.disabled = true;
+  openGiftBtn.textContent = "🎉 เปิดแล้ว!";
+});
+
+
+function tryPlayMusic(force=false){
+  if (!bgMusic.src) return;
+  bgMusic.volume = 0.6;
+  bgMusic.loop = true;
+  const p = bgMusic.play();
+  if (p !== undefined) {
+    p.catch(() => {
+      // autoplay blocked — rely on user gesture
+      if (force) bgMusic.play();
+    });
+  }
+}
+
+// simple confetti generator
+function startConfetti(){
+  const colors = ["#FF6B6B","#FFD93D","#6BCB77","#4D96FF","#FF7AA2"];
+  const count = 100;
+  for (let i=0;i<count;i++){
+    setTimeout(()=> {
+      createPiece(colors[Math.floor(Math.random()*colors.length)]);
+    }, Math.random()*800);
+  }
+}
+
+function createPiece(color){
+  const el = document.createElement("div");
+  el.className = "confetti-piece";
+  el.style.background = color;
+  el.style.left = (Math.random()*100) + "%";
+  el.style.top = "-10%";
+  el.style.transform = `rotate(${Math.random()*360}deg)`;
+  const size = 6 + Math.random()*14;
+  el.style.width = `${size}px`;
+  el.style.height = `${size*1.3}px`;
+  confettiContainer.appendChild(el);
+
+  const duration = 3000 + Math.random()*4000;
+  const endX = (Math.random()*200 - 100); // drift
+  el.animate([
+    { transform: `translate3d(0,0,0) rotate(${Math.random()*360}deg)`, opacity:1 },
+    { transform: `translate3d(${endX}px,100vh,0) rotate(${Math.random()*720}deg)`, opacity:0.8 }
+  ], {
+    duration,
+    easing: 'cubic-bezier(.2,.6,.2,1)',
+    iterations: 1
+  });
+
+  // remove after animation
+  setTimeout(()=> el.remove(), duration + 200);
+}
+
+// countdown (optional)
+if (countdownTarget) {
+  const target = new Date(countdownTarget).getTime();
+  if (!isNaN(target)) {
+    const ticker = setInterval(()=>{
+      const now = Date.now();
+      const diff = target - now;
+      if (diff <= 0) {
+        countdownEl.textContent = "ถึงวันเกิดแล้ว 🎉";
+        clearInterval(ticker);
+        return;
+      }
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+      const mins = Math.floor((diff%(1000*60*60))/(1000*60));
+      const secs = Math.floor((diff%(1000*60))/1000);
+      countdownEl.textContent = `เหลือ ${days} วัน ${hours} ชม ${mins} นาที ${secs} วิ`;
+    }, 1000);
+  }
+}

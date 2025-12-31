@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>สุขสันต์วันเกิด — ชื่อแฟน</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="overlay"></div>
+      <div class="hero-content">
+        <img id="photo" src="images/photo.jpg" alt="รูปของเรา" />
+        <h1 id="title">สุขสันต์วันเกิด<br><span id="name">ชื่อแฟน</span> </h1>
+        <p id="subtitle">ขอให้มีความสุขมาก ๆ สุขภาพแข็งแรง และสมปรารถนาทุกอย่างนะ</p>
+        <div class="buttons">
+          <button id="openGiftBtn">🎁 เปิดของขวัญ</button>
+
+        </div>
+        <div id="countdown" class="countdown"></div>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="message" id="messageSection" hidden>
+        <h2>มีอะไรจะบอกด้วยแหละะะ</h2>
+        <p id="messageText">นี่คือข้อความจากใจ — เปลี่ยนได้ที่ script.js</p>
+      </section>
+
+      <section class="gallery">
+        <h3>รูปใครเนิ้ยยยน่ารักจังงง</h3>
+        <div class="photos">
+          <img src="images/photo1.jpg" alt="photo1" />
+          <img src="images/photo2.jpg" alt="photo2" />
+          <img src="images/photo3.jpg" alt="photo3" />
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>สร้างโดยฟลุ๊ค — คนที่รักพี่ไหมที่สุด</small>
+    </footer>
+
+    <!-- confetti container -->
+    <div id="confetti"></div>
+
+    <!-- audio (replace src with your song) -->
+    <audio id="bgMusic" src="music/ข้างกาย.mp3" preload="auto"></audio>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
